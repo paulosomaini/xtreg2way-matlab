@@ -14,18 +14,7 @@ DD=full(sum(DH,2));
 HH=full(sum(DH,1)); HH=HH(1:end-1); DH=DH(:,1:end-1);
 invHH=sparse(1:struc.T-1,1:struc.T-1,HH.^(-1),struc.T-1,struc.T-1,struc.T-1);
 invDD=sparse(1:struc.N,1:struc.N,DD.^(-1),struc.N,struc.N,struc.N);
-useinv=1;
-if ~useinv
-    if struc.N<struc.T
-        struc.invA=diag(DD)-DH*invHH*DH';
-        struc.B=-invA\DH*invHH;
-        struc.C=invDD-invDD*DH/invA*DH'*invDD;
-    else
-        struc.invC=diag(HH)-DH'*invDD*DH;
-        struc.A=invHH-invHH*DH'/invC*DH*invHH;
-        struc.B=-A*DH*invHH;
-    end
-else
+
     if struc.N<struc.T
         struc.A=ginv(diag(DD)-DH*invHH*DH');
         struc.C.invHH=invHH;
@@ -38,7 +27,6 @@ else
         struc.B=-struc.A.invDDDH*struc.C;
     end
         
-end
 
 function ginvA=ginv(A)
     % generalized inverse: if matrix is rank-deficient it means that I have
