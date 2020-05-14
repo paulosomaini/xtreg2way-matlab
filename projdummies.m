@@ -1,4 +1,19 @@
 function struc=projdummies(hhid,tid,w)
+%PROJDUMMIES computes the first step of the algorithm. 
+% If S=[D,H] where D is the matrix of individual effect dummies and H 
+% is the matrix of time dummies. It computes the inverse of (S’S) but 
+% returns a structure with the minimal information required to construct it. 
+%
+% [struc] = projdummies(hhid,tid,w)
+% 
+% hhid is a vector with the individual effect identifier. 
+% tid is a vector with the time effect identifier 
+% w is a vector of weights (defaults to a vector on ones)
+%
+% Observations with weights equal to zero are dropped. 
+% The three vectors have to have the same length.
+
+if nargin < 3, w = ones(size(hhid)); end
 if any(isnan(w)|isinf(w))
     q=1:numel(w);
     disp(q(isnan(w)|isinf(w)));
