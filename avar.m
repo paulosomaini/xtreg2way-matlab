@@ -10,14 +10,14 @@ function matCov=avar(X,e,group,J)
 %provided.
 % If the matrix X'*X was calculated before, it can be entered as the
 % argument J. J is a K-by-K matrix.
-[L,K]=size(X); e=e(:); L2=numel(e);
+[L,~]=size(X); e=e(:); L2=numel(e);
 if ~(L==L2),error('myApp:dimen','X and e should have the same number of rows'); end
-if nargin<4;
+if nargin<4
     J=X'*X;
 end
 [~,~,group]=unique(group); G=max(group);
 eX=sparse(1:L,1:L,e,L,L,L)*X;
-if nargin<3 || ~(numel(group)==L) || G==L;
+if nargin<3 || ~(numel(group)==L) || G==L
     disp('Heteroscedasticity Robust SE');
     V=eX'*eX;
 else

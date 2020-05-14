@@ -8,8 +8,8 @@ end
 
 aux=sparse(struc.hhid,struc.tid,var.*struc.w,struc.N,struc.T,struc.obs);
 Dy=full(sum(aux,2));
-Ty=full(sum(aux,1))'; Ty=Ty([1:end-1]');
-if struc.N<struc.T;
+Ty=full(sum(aux,1))'; Ty=Ty((1:end-1)');
+if struc.N<struc.T
     delta=struc.A*Dy+struc.B*Ty;
     tau=[struc.B'*(Dy-struc.C.invHHDH'*Ty)+struc.C.invHH*Ty;0];
 else
