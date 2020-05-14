@@ -4,7 +4,7 @@ function matCov=avar(X,e,group,J)
 %X is the matrix of covariates: L-by-K. L num of obs, and K num of
 %covariates.
 %e is the vector of residuals: L-by-1;
-%group is the cluster level: L-by-1. If g has more or less than L elements
+%group is the cluster level: L-by-1. If group has more or less than L elements
 %it will be assumed that the user required the heteroscedasticity robust
 %estimate. Otherwise, the clustered heteroscedasticity robust estimate is
 %provided.
