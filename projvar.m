@@ -1,4 +1,4 @@
-function varout=projvar(var,struc)
+function [varout,delta,tau]=projvar(var,struc)
 if any(isnan(var)|isinf(var))
     q=1:numel(var);
     disp(q(isnan(var)|isinf(var)));
