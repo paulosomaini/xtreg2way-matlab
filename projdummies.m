@@ -14,10 +14,10 @@ function struc=projdummies(hhid,tid,w)
 % The three vectors have to have the same length.
 
 if nargin < 3, w = ones(size(hhid)); end
-if any(isnan(w)|isinf(w))
+if any(isnan(w)|isinf(w) | w<0)
     q=1:numel(w);
-    disp(q(isnan(w)|isinf(w)));
-    error('myApp:argChk','Check for NaN or Inf in observations listed above')
+    disp(q(isnan(w)|isinf(w) | w<0));
+    error('myApp:argChk','Check for NaN, Inf or negative weights in observations listed above')
 end
 
 struc.obs=numel(w); struc.w=w;
@@ -42,6 +42,7 @@ invDD=sparse(1:struc.N,1:struc.N,DD.^(-1),struc.N,struc.N,struc.N);
         struc.B=-struc.A.invDDDH*struc.C;
     end
         
+% Subfunctions
 
 function ginvA=ginv(A)
     % generalized inverse: if matrix is rank-deficient it means that I have
@@ -51,7 +52,6 @@ function ginvA=ginv(A)
     ginvA = V*diag(D.^(-1))*V';
    
     
-    
-    
+
 
     

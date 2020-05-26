@@ -47,23 +47,31 @@ if obs~=numel(iid) || obs~=numel(tid) || numel(y)~=obs
         'y, iid and tid should be Nth order vectors, and X should be a N by K matrix')
 end
 if nargin<5 || isempty(w), w=ones(obs,1); end
+[flag_redundant,nr] = nonredundant(iid,tid,w);
+if flag_redundant
+    esample = ismember(iid,nr.iid) & ismember(tid,nr.tid);
+    y = y(esample); X = X(esample,:); iid = iid(esample); 
+    tid = tid(esample);w = w(esample);
+end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
 if nargin<8 || isempty(noise), noise=1; end
+if flag_redundant, struc.esample = esample; end
 if projectVars
     for kk=1:K,X(:,kk)=projvar(X(:,kk),struc);end
     y=projvar(y,struc);
 end
 reg=regress1(y,X);
 betaHat=reg.beta';
+dof =struc.obs /(struc.obs-struc.N-struc.T-numel(reg.beta));
 switch se
     case 0
         sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1-numel(reg.beta));
-        aVarHat=sig2hat*inv(reg.XX);
+        aVarHat=sig2hat/reg.XX;
     case 1
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX);
+        aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
     case 2
-        aVarHat=avar(X,reg.res,1:obs,reg.XX);
+        aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
     case 11
         aVarHat=avar(X,reg.res,struc.hhid,reg.XX);
         stata_dof=((obs-1)/(obs-numel(reg.beta)-1))*(struc.N/(struc.N-1));
