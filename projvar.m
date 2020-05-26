@@ -5,6 +5,9 @@ if any(isnan(var)|isinf(var))
     error('myApp:argChk','Check for NaN or Inf in observations listed above')
 end
 
+if isfield('esample',struc) && numel(var) == numel(struc.esample)
+    var = var(struc.esample);
+end
 
 aux=sparse(struc.hhid,struc.tid,var.*struc.w,struc.N,struc.T,struc.obs);
 Dy=full(sum(aux,2));
