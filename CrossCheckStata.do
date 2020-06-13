@@ -11,18 +11,28 @@ timer clear
 timer on 1
 xi: xtreg y x1 x2 i.tid [aw=w], fe
 timer off 1
-*timer off 1
+timer list 
+timer clear 
+outreg2 using RegTestSTATA.doc, replace ctitle(Xtreg) keep(x1 x2) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
 * Fixed effects, robust
-timer on 2
+timer on 1
 xi: xtreg y x1 x2 i.tid [aw=w], fe vce(robust)
-timer off 2
+timer off 1
+timer list 
+timer clear 
+outreg2 using RegTestSTATA.doc, append ctitle(Xtreg-robust) keep(x1 x2) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1)) 
 *REGHDFE
-timer on 3
+timer on 1
 reghdfe y x1 x2, absorb(hhid tid)
-timer off 3
+timer off 1
+timer list 
+timer clear 
+outreg2 using RegTestSTATA.doc, append ctitle(Reghdfe) keep(x1 x2) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
 * Fixed effects, robust
-timer on 4
+timer on 1
 reghdfe y x1 x2, absorb(hhid tid) vce(cluster hhid)
-timer off 4
-timer list
+timer off 1
+timer list 
+timer clear 
+outreg2 using RegTestSTATA.doc, append ctitle(Reghdfe-Robust) keep(x1 x2) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
 log close
