@@ -19,7 +19,7 @@
 \ql Group FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
 \ql Time FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
 \trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx2160\clbrdrb\brdrs\cellx3600\clbrdrb\brdrs\cellx5472\clbrdrb\brdrs\cellx6912\clbrdrb\brdrs\cellx9072
-\ql Running Time\cell\qc 4.104\cell\qc 4.530\cell\qc 1.033\cell\qc 0.565\cell\row
+\ql Running Time\cell\qc 4.851\cell\qc 5.977\cell\qc 0.845\cell\qc 0.391\cell\row
 \pard\qc
 Standard errors in parentheses\par
 *** p<0.01, ** p<0.05, * p<0.1\par

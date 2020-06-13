@@ -89,4 +89,3 @@ tic; [beta1,var1] = xtreg2way(y,[x1],hhid,tid,w,struc0,1); toc;
 tic; [beta1,var1] = xtreg2way(yp,Xp(:,1),struc0); toc;
 
 
-
