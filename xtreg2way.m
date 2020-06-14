@@ -67,7 +67,7 @@ dof =struc.obs /(struc.obs-struc.N-struc.T-numel(reg.beta));
 switch se
     case 0
         sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1-numel(reg.beta));
-        aVarHat=sig2hat/reg.XX;
+        aVarHat=sig2hat*inv(reg.XX);
     case 1
         aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
     case 2
