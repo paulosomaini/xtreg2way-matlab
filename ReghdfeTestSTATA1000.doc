@@ -1,0 +1,25 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx1872\clbrdrt\brdrs\cellx3312\clbrdrt\brdrs\cellx4896\clbrdrt\brdrs\cellx7200\clbrdrt\brdrs\cellx9504
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\qc (4)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1872\cellx3312\cellx4896\cellx7200\cellx9504
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx1872\clbrdrb\brdrs\cellx3312\clbrdrb\brdrs\cellx4896\clbrdrb\brdrs\cellx7200\clbrdrb\brdrs\cellx9504
+\ql VARIABLES\cell\qc Reghdfe\cell\qc Reghdfe-R\cell\qc Reghdfe-one C-R\cell\qc Reghdfe-one C-R\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx1872\cellx3312\cellx4896\cellx7200\cellx9504
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql x1\cell\qc 0.997***\cell\qc 0.997***\cell\qc 0.997***\cell\qc 0.997***\cell\row
+\ql \cell\qc (0.00489)\cell\qc (0.00489)\cell\qc (0.00592)\cell\qc (0.00594)\cell\row
+\ql x2\cell\qc -0.997***\cell\qc -0.997***\cell\qc \cell\qc \cell\row
+\ql \cell\qc (0.00491)\cell\qc (0.00479)\cell\qc \cell\qc \cell\row
+\ql Constant\cell\qc 1.035***\cell\qc 1.035***\cell\qc 1.018***\cell\qc 1.018***\cell\row
+\ql \cell\qc (0.00488)\cell\qc (0.000121)\cell\qc (0.00591)\cell\qc (0.000105)\cell\row
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql Observations\cell\qc 89,958\cell\qc 89,958\cell\qc 89,958\cell\qc 89,958\cell\row
+\ql R-squared\cell\qc 0.750\cell\qc 0.750\cell\qc 0.633\cell\qc 0.633\cell\row
+\ql Group FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
+\ql Time FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx1872\clbrdrb\brdrs\cellx3312\clbrdrb\brdrs\cellx4896\clbrdrb\brdrs\cellx7200\clbrdrb\brdrs\cellx9504
+\ql Running Time\cell\qc 1.116\cell\qc 0.446\cell\qc 0.861\cell\qc 0.462\cell\row
+\pard\qc
+Standard errors in parentheses\par
+*** p<0.01, ** p<0.05, * p<0.1\par
+}
