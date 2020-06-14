@@ -56,7 +56,7 @@ reghdfe y x1, absorb(hhid tid)
 timer off 1
 timer list 
 timer clear 
-outreg2 using ReghdfeTestSTATA1000.doc, append ctitle(Reghdfe-one C-R) keep(x1) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
+outreg2 using ReghdfeTestSTATA1000.doc, append ctitle(Reghdfe-one C) keep(x1) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
 * Fixed effects, robust
 timer on 1
 reghdfe y x1, absorb(hhid tid) vce(cluster hhid)
