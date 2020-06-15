@@ -82,7 +82,7 @@ switch se
 end
 
 if noise
-    format('long');
+    format('short');
     disp('Coefficient  S.E.     t-stat       p-val' )
     std=sqrt(diag(aVarHat));
     disp([betaHat'  std abs(betaHat'./std) (1-cdf('normal',abs(betaHat'./std),0,1))/2])
