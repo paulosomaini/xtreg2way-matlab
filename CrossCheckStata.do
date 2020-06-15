@@ -30,7 +30,7 @@ timer list
 timer clear 
 outreg2 using XTRegTestSTATA1000.doc, append ctitle(Xtreg-one C) keep(x1) addtext(Group FE, YES, Time FE, YES) addstat(Running Time, r(t1))
 timer on 1
-xi: xtreg y x1 i.tid [aw=w], fe
+xi: xtreg y x1 i.tid [aw=w], fe vce(robust)
 timer off 1
 timer list 
 timer clear 
