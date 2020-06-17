@@ -78,7 +78,7 @@ switch se
         aVarHat=aVarHat*(stata_dof)^2;
     otherwise
         disp('Computing standard errors robust to heteroskedasticity and within group correlation');
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX);
+        aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
 end
 
 if noise
