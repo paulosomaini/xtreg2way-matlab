@@ -1,4 +1,4 @@
-function [betaHat,aVarHat,y,X,struc] = xtreg2way(y,X,iid,tid,w,struc,se,noise)
+function [betaHat,aVarHat,y,X,struc,cluster] = xtreg2way(y,X,iid,tid,w,struc,se,cluster,noise)
 %XTREG2WAY Estimates a 2-way fixed effect model absorbing the two set of
 %dummies and reports standard errors
 % Usage:
@@ -55,7 +55,9 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
-if nargin<8 || isempty(noise), noise=1; end
+if nargin<8 || isempty(cluster), cluster=struc.hhid; end
+if nargin<9 || isempty(noise), noise=1; end
+
 if flag_redundant, struc.esample = esample; end
 if projectVars
     for kk=1:K,X(:,kk)=projvar(X(:,kk),struc);end
@@ -69,11 +71,11 @@ switch se
         sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1-numel(reg.beta));
         aVarHat=sig2hat*inv(reg.XX);
     case 1
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
+        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX)*dof;
     case 2
         aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
     case 11
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX);
+        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX);
         stata_dof=((obs-1)/(obs-numel(reg.beta)-1))*(struc.N/(struc.N-1));
         aVarHat=aVarHat*(stata_dof)^2;
     otherwise
