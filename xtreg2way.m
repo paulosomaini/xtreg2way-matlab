@@ -65,17 +65,17 @@ if projectVars
 end
 reg=regress1(y,X);
 betaHat=reg.beta';
-dof =struc.obs /(struc.obs-struc.N-struc.T-numel(reg.beta));
+dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta));
 switch se
     case 0
-        sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1-numel(reg.beta));
+        sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1+struc.rank_adj-numel(reg.beta));
         aVarHat=sig2hat*inv(reg.XX);
     case 1
-        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX)*dof;
+        aVarHat=avar(X,reg.res,cluster,reg.XX)*dof;
     case 2
         aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
     case 11
-        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX);
+        aVarHat=avar(X,reg.res,cluster,reg.XX);
         stata_dof=((obs-1)/(obs-numel(reg.beta)-1))*(struc.N/(struc.N-1));
         aVarHat=aVarHat*(stata_dof)^2;
     otherwise

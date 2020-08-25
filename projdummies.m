@@ -32,11 +32,13 @@ invDD=sparse(1:struc.N,1:struc.N,DD.^(-1),struc.N,struc.N,struc.N);
 
     if struc.N<struc.T
         struc.A=ginv(diag(DD)-DH*invHH*DH');
+        struc.rank_adj= struc.N-rank(struc.A);        
         struc.C.invHH=invHH;
         struc.C.invHHDH=invHH*DH';
         struc.B=-struc.A*(struc.C.invHHDH)';
     else
         struc.C=ginv(diag(HH)-DH'*invDD*DH);
+        struc.rank_adj= struc.T-rank(struc.C);
         struc.A.invDD=invDD;
         struc.A.invDDDH=invDD*DH;
         struc.B=-struc.A.invDDDH*struc.C;
