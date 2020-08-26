@@ -55,27 +55,31 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
-if nargin<8 || isempty(cluster), cluster=struc.hhid; end
+if nargin<8 || isempty(cluster), cluster(esample)=struc.hhid; end
 if nargin<9 || isempty(noise), noise=1; end
 
 if flag_redundant, struc.esample = esample; end
+
+if flag_redundant, cluster=cluster(esample);end
+
+
 if projectVars
     for kk=1:K,X(:,kk)=projvar(X(:,kk),struc);end
     y=projvar(y,struc);
 end
 reg=regress1(y,X);
 betaHat=reg.beta';
-dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta));
+dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta)+struc.rank_adj);
 switch se
     case 0
         sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1+struc.rank_adj-numel(reg.beta));
         aVarHat=sig2hat*inv(reg.XX);
     case 1
-        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX)*dof;
+        aVarHat=avar(X,reg.res,cluster,reg.XX)*dof;
     case 2
         aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
     case 11
-        aVarHat=avar(X,reg.res,cluster(esample,:),reg.XX);
+        aVarHat=avar(X,reg.res,cluster,reg.XX);
         stata_dof=((obs-1)/(obs-numel(reg.beta)-1))*(struc.N/(struc.N-1));
         aVarHat=aVarHat*(stata_dof)^2;
     otherwise
