@@ -55,13 +55,12 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
-if nargin<8 || isempty(cluster), cluster(esample)=struc.hhid; end
+if flag_redundant & (nargin<8 || isempty(cluster)), cluster(esample)=struc.hhid;
+elseif nargin<8 || isempty(cluster), cluster=struc.hhid;end 
 if nargin<9 || isempty(noise), noise=1; end
 
 if flag_redundant, struc.esample = esample; end
-
-if flag_redundant, cluster=cluster(esample);end
-
+if flag_redundant, cluster=cluster(esample);end 
 
 if projectVars
     for kk=1:K,X(:,kk)=projvar(X(:,kk),struc);end
