@@ -55,7 +55,7 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
-if flag_redundant & (nargin<8 || isempty(cluster)), cluster(esample)=struc.hhid;
+if and(flag_redundant, (nargin<8 || isempty(cluster))), cluster(esample)=struc.hhid;
 elseif nargin<8 || isempty(cluster), cluster=struc.hhid;end 
 if nargin<9 || isempty(noise), noise=1; end
 
@@ -69,11 +69,19 @@ end
 reg=regress1(y,X);
 betaHat=reg.beta';
 dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta)+struc.rank_adj);
+
 switch se
     case 0
         sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1+struc.rank_adj-numel(reg.beta));
         aVarHat=sig2hat*inv(reg.XX);
     case 1
+        struc.nested_adj=0;
+        nhhid=isNested(iid,cluster);
+        ntid=isNested(tid,cluster);
+        if nhhid==1, struc.nested_adj=struc.N;end
+        if ntid==1, struc.nested_adj=struc.T;end
+        if and(nhhid==1,ntid==1), struc.nested_adj=struc.N+struc.T;end    
+        dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta)+struc.rank_adj+struc.nested_adj);
         aVarHat=avar(X,reg.res,cluster,reg.XX)*dof;
     case 2
         aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
@@ -93,4 +101,14 @@ if noise
     disp([betaHat'  std abs(betaHat'./std) (1-cdf('normal',abs(betaHat'./std),0,1))/2])
 end
 end
+
+function [yn]=isNested(f1,f2)
+    tbl = crosstab(f1,f2);
+    not_nested=sum(tbl~=0,2);
+    if (not_nested> 1)
+        yn=false;
+    else yn=true;
+    end 
+    
+end 
 
