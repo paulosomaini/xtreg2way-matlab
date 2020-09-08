@@ -55,6 +55,15 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
+if and(se==0, ~isempty(cluster))
+    error('You selected a standard error computation that is not compatible with cluster')
+end
+if and(se==2, ~isempty(cluster))
+    error('You selected a standard error computation that is not compatible with cluster')
+end
+if and(isempty(se), ~isempty(cluster))
+   se=1;
+end
 if and(flag_redundant, (nargin<8 || isempty(cluster))), cluster(esample)=struc.hhid;
 elseif nargin<8 || isempty(cluster), cluster=struc.hhid;end 
 if nargin<9 || isempty(noise), noise=1; end
