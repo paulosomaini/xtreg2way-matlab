@@ -5,7 +5,7 @@ This folder contains the Matlab functions necessary to run the algorithm describ
 Wrapper:
 reg2way.m estimates a 2-way fixed effect model absorbing the two set of dummies and reports standard errors. Syntax:
 ```
-[betaHat,aVarHat,yp,Xp,struc]=xtreg2way(y,X,iid,tid,w,struc,se,noise)
+[betaHat,aVarHat,yp,Xp,struc,cluster]=xtreg2way(y,X,iid,tid,w,struc,se,cluster,noise)
 ```
 Description of arguments
 .y (N-by-1) is the dependent variable
@@ -16,11 +16,11 @@ Description of arguments
 
 struc (structure) contains the results of the first step of the  algorithm. struc can be omitted or set to [] in which case, it will be automatically calculated. Notice that the first step is computationally expensive. If many regressions are to be run using the same set of covariates it is possible to run the first step only once. 
 
-se (possible values: 0,1,2,11) indicates the standard error estimate to be calculated:
+se (possible values: 0,1,2,11) & cluster, indicates the standard error estimate to be calculated:
 ```
-.se==0 : standard errors assuming homoscedasticity and no within  group correlation or serial correlation. 
-.se==1 : standard errors  proposed by Arellano (1987) robust to heteroscedasticity and serial correlation. 
-.se==2 : standard errors robust to heteroscedasticity but assumes no correlation within group or serial correlation. 
+.se==0 : standard errors assuming homoscedasticity and no within  group correlation or serial correlation. This option can not be used with cluster option.
+.se==1 : standard errors  proposed by Arellano (1987) robust to heteroscedasticity and serial correlation. This option works with cluster option. If cluster option is omitted, the the standard errors will be calculated clustering by the first fixed effect selected. 
+.se==2 : standard errors robust to heteroscedasticity but assumes no correlation within group or serial correlation. This option can not be used with cluster option.
 .se==11 : Arellano standard errors with a degree of freedom correction performed by Stata xtreg, fe. 
 ```
 If se is omitted or set to [] then it is set to 1 and the Arellano (1987) estimator is computed.  
@@ -38,14 +38,15 @@ Description of output:
 .aVarHat (K-by-K) estimate of the matrix of variances and covariance of  the estimator.
 .yp (N-by-1) the residual of the projection of y on the two sets of  dummies.
 .Xp (N-by-K) the residual of the projection of each column of X on the two  sets of dummies.
-.struc (structure) results of the first step of the algorithm. 
+.struc (structure) results of the first step of the algorithm.
+.cluster make an esample of the variable of the cluster selected. 
 ```
 
 Alternative Usage:
 If the first step was already performed and variables yp and Xp are  the projected error of the original y and X on the two sets of  dummies, then it is possible to avoid repeating the first two steps of the algorithm by calling:
 .[betaHat,aVarHat]=xtreg2way(yp,Xp,struc)  
 or
-.[betaHat,aVarHat]=xtreg2wayPost(yp,Xp,struc,se,noise)
+.[betaHat,aVarHat]=xtreg2wayPost(yp,Xp,struc,se,cluster,noise)
 
 Matlab Functions:
 .projdummies.m computes the first step of the algorithm. If S=[D,H] where D is the matrix of individual effect dummies and H is the matrix of time dummies. It computes the inverse of (S’S) but returns a structure with the minimal information required to construct it. Syntax: struc=projdummies(hhid,tid,w). hhid is a vector with the individual effect identifier. tid is a vector with the time effect identifier and w is a vector of weights. Observations with weights equal to zero are dropped. The three vectors have to have the same length. 
