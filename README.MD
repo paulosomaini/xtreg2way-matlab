@@ -16,12 +16,11 @@ reg2way.m estimates a 2-way fixed effect model absorbing the two set of dummies 
 
 `struc` (structure) contains the results of the first step of the  algorithm. struc can be omitted or set to [] in which case, it will be automatically calculated. Notice that the first step is computationally expensive. If many regressions are to be run using the same set of covariates it is possible to run the first step only once. 
 
-`se` (possible values: 0,1,2,11) & `cluster`, indicates the standard error estimate to be calculated:
+`se` (possible values: 0,1,2) & `cluster`, indicates the standard error estimate to be calculated:
 ```
 .se==0 : standard errors assuming homoscedasticity and no within  group correlation or serial correlation. This option can not be used with cluster option.
 .se==1 : standard errors  proposed by Arellano (1987) robust to heteroscedasticity and serial correlation. This option works with cluster option. If cluster option is omitted, the the standard errors will be calculated clustering by the first fixed effect selected. 
 .se==2 : standard errors robust to heteroscedasticity but assumes no correlation within group or serial correlation. This option can not be used with cluster option.
-.se==11 : Arellano standard errors with a degree of freedom correction performed by Stata xtreg, fe. 
 ```
 If `se` is omitted or set to [] and `cluster` is selected, then se is set to `"1"`.
 
