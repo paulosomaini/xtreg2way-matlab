@@ -1,4 +1,4 @@
-function [betaHat,aVarHat,y,X,struc] = xtreg2way(y,X,iid,tid,w,struc,se,noise)
+function [betaHat,aVarHat,y,X,struc,cluster] = xtreg2way(y,X,iid,tid,w,struc,se,cluster,noise)
 %XTREG2WAY Estimates a 2-way fixed effect model absorbing the two set of
 %dummies and reports standard errors
 % Usage:
@@ -18,8 +18,7 @@ function [betaHat,aVarHat,y,X,struc] = xtreg2way(y,X,iid,tid,w,struc,se,noise)
 %  proposed by Arellano (1987) robust to heteroscedasticity and serial 
 %  correlation. If se==2 it computes standard errors robust to heteroscedasticity, 
 %  but assumes no correlation within group or serial correlation.
-%  If se==11 Arellano (1987) standard errors with a degree of freedom
-%  correction performed by Stata xtreg, fe. If se is omitted or set to [] 
+%  If se is omitted or set to [] 
 %  then se is set to 1 and the Arellano (1987) estimator is computed.
 %  noise (posible values 0,1) If noise==0, results are not displayed. If
 %  noise==1 results are displayed. If noise is omitted or set to [],
@@ -55,31 +54,54 @@ if flag_redundant
 end
 if nargin<6 || isempty(struc), struc=projdummies(iid,tid,w); end
 if nargin<7 || isempty(se), se=1; end
-if nargin<8 || isempty(noise), noise=1; end
+if and(se==0, ~isempty(cluster))
+    error('You selected a standard error computation that is not compatible with cluster')
+end
+if and(se==2, ~isempty(cluster))
+    error('You selected a standard error computation that is not compatible with cluster')
+end
+if and(isempty(se), ~isempty(cluster))
+   se=1;
+end
+if and(flag_redundant, (nargin<8 || isempty(cluster))), cluster(esample)=struc.hhid;
+elseif nargin<8 || isempty(cluster), cluster=struc.hhid;end 
+if nargin<9 || isempty(noise), noise=1; end
+
 if flag_redundant, struc.esample = esample; end
+if flag_redundant, cluster=cluster(esample);end 
+
 if projectVars
     for kk=1:K,X(:,kk)=projvar(X(:,kk),struc);end
     y=projvar(y,struc);
 end
 reg=regress1(y,X);
 betaHat=reg.beta';
-dof =struc.obs /(struc.obs-struc.N-struc.T-numel(reg.beta));
+dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta)+struc.rank_adj);
+
+if se~=0 & se~=1 & se~=2
+    error('wrong "se" specification')
+    end
+
 switch se
     case 0
-        sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1-numel(reg.beta));
+        sig2hat=(reg.res'*reg.res)/(sum(struc.w>0)-struc.N-struc.T+1+struc.rank_adj-numel(reg.beta));
         aVarHat=sig2hat*inv(reg.XX);
     case 1
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
+        struc.nested_adj=0;
+        nhhid=isNested(iid,cluster);
+        ntid=isNested(tid,cluster);
+        if nhhid==1, struc.nested_adj=struc.N;end
+        if ntid==1, struc.nested_adj=struc.T;end
+        if and(nhhid==1,ntid==1), struc.nested_adj=struc.N+struc.T;end    
+        dof =struc.obs /(struc.obs-struc.N-struc.T+struc.rank_adj-numel(reg.beta)+struc.rank_adj+struc.nested_adj);
+        aVarHat=avar(X,reg.res,cluster,reg.XX)*dof;
     case 2
         aVarHat=avar(X,reg.res,1:obs,reg.XX)*dof;
-    case 11
-        aVarHat=avar(X,reg.res,struc.hhid,reg.XX);
-        stata_dof=((obs-1)/(obs-numel(reg.beta)-1))*(struc.N/(struc.N-1));
-        aVarHat=aVarHat*(stata_dof)^2;
     otherwise
         disp('Computing standard errors robust to heteroskedasticity and within group correlation');
         aVarHat=avar(X,reg.res,struc.hhid,reg.XX)*dof;
 end
+
 
 if noise
     format('short');
@@ -88,4 +110,14 @@ if noise
     disp([betaHat'  std abs(betaHat'./std) (1-cdf('normal',abs(betaHat'./std),0,1))/2])
 end
 end
+
+function [yn]=isNested(f1,f2)
+    tbl = crosstab(f1,f2);
+    not_nested=sum(tbl~=0,2);
+    if (not_nested> 1)
+        yn=false;
+    else yn=true;
+    end 
+    
+end 
 
